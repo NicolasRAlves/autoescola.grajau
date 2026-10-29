@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://autoescolagrajau.com.br/sitemap.xml
+Sitemap: https://autoescolagrajau.vercel.app/sitemap.xml

@@ -18,10 +18,10 @@ window.GRAJAU = {
 
   /* true = mostra as marcas amarelas [CLIENTE INFORMAR] e a faixa de
      prévia. Troque para false ANTES de publicar. */
-  modoRascunho: true,
+  modoRascunho: false,
 
   /* Domínio definitivo (sem barra no final). PROVISÓRIO. */
-  siteUrl: "https://autoescolagrajau.com.br",
+  siteUrl: "https://autoescolagrajau.vercel.app",
 
   nome: "Auto Escola Grajaú",
   marca: "Instrutor Autônomo Grajaú",
