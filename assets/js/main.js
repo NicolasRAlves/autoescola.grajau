@@ -114,6 +114,14 @@
       var i = mapa[el.getAttribute("data-preco")];
       if (i && typeof i.preco === "number") el.textContent = brl(i.preco);
     });
+    /* exames e taxas pagos à parte */
+    var taxas = (C.planos && C.planos.taxasAParte) || [];
+    var total = taxas.reduce(function (s, t) { return s + (typeof t.valor === "number" ? t.valor : 0); }, 0);
+    $$("[data-taxa]").forEach(function (el) {
+      var id = el.getAttribute("data-taxa");
+      var t = id === "total" ? { valor: total } : taxas.filter(function (x) { return x.id === id; })[0];
+      if (t && typeof t.valor === "number") el.textContent = brl(t.valor);
+    });
   }
 
   /* ---------- Serviços opcionais (true / false / null) ---------- */
@@ -145,16 +153,23 @@
     if (!btn || !menu) return;
     /* o menu fica no DOM (para animar) e fica inerte enquanto fechado */
     menu.hidden = false; menu.inert = true;
-    var aberto = false;
+    var aberto = false, posY = 0;
     function fechar(foco) {
+      if (!aberto) return;
       aberto = false;
       btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-label", "Abrir menu");
-      menu.classList.remove("aberto"); menu.inert = true; doc.body.classList.remove("menu-aberto");
-      if (foco) btn.focus();
+      menu.classList.remove("aberto"); menu.inert = true;
+      /* destrava a página exatamente onde estava */
+      doc.body.classList.remove("menu-aberto"); doc.body.style.top = "";
+      window.scrollTo({ top: posY, left: 0, behavior: "instant" });
+      if (foco) btn.focus({ preventScroll: true });
     }
     function abrir() {
       aberto = true;
       btn.setAttribute("aria-expanded", "true"); btn.setAttribute("aria-label", "Fechar menu");
+      /* trava a página por trás sem ela pular (funciona também no iPhone) */
+      posY = window.scrollY;
+      doc.body.style.top = -posY + "px";
       menu.inert = false; menu.classList.add("aberto"); doc.body.classList.add("menu-aberto");
       menu.scrollTop = 0;
       setTimeout(function () { var p = $(".menu__lista a", menu); if (p && aberto) p.focus({ preventScroll: true }); }, reduz ? 0 : 350);

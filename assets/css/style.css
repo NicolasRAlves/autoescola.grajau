@@ -831,3 +831,28 @@ body { padding-bottom: 70px; }
   [data-orc-rapido] .opcoes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   [data-orc-rapido] .opcao > span { width: 100%; height: 100%; min-height: 46px; padding: 8px 10px; font-size: .9rem; line-height: 1.2; }
 }
+
+/* ---------- Exames e taxas (pagos à parte) ---------- */
+.taxas { display: grid; gap: 18px 32px; padding: 24px; background: var(--sup); border: 1px dashed var(--ouro); border-radius: var(--raio); scroll-margin-top: calc(var(--topo) + 20px); }
+@media (min-width: 860px) { .taxas { grid-template-columns: 1fr 1.2fr; align-items: center; } }
+.taxas h3 { font-size: clamp(1.5rem, 4vw, 1.9rem); text-transform: uppercase; margin: 10px 0 6px; }
+.taxas__texto p { color: var(--txt-suave); margin: 0; }
+.taxas__lista { list-style: none; margin: 0; padding: 0; }
+.taxas__lista li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--borda); }
+.taxas__lista strong { font-family: var(--f-display); font-size: 1.45rem; white-space: nowrap; }
+.taxas__total { border-bottom: 0 !important; border-top: 2px solid var(--ouro); margin-top: 4px; font-weight: 700; }
+.taxas__total strong { color: var(--destaque); font-size: 1.8rem; }
+.aviso-taxas {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 16px; padding: 14px 16px; border-radius: 12px;
+  border: 1px dashed rgba(217,169,58,.55); background: rgba(217,169,58,.07); color: var(--txt); text-decoration: none; font-size: .95rem;
+}
+.aviso-taxas:hover { border-color: var(--ouro); color: var(--txt); }
+.aviso-taxas svg { width: 20px; height: 20px; color: var(--ouro); flex: none; }
+.aviso-taxas strong { color: var(--ouro-claro); }
+.aviso-taxas__ver { margin-left: auto; font-family: var(--f-display); font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--destaque); }
+
+/* ---------- Menu: cabeçalho fixo enquanto aberto (a faixa de prévia ou a barra do navegador não empurram mais o logo para cima das opções) ---------- */
+body.menu-aberto .topo { position: fixed; top: 0; left: 0; right: 0; padding-top: env(safe-area-inset-top); }
+.menu-mobile { padding-top: calc(var(--topo) + 22px + env(safe-area-inset-top)); }
+.menu__lista a { font-size: clamp(1.9rem, min(8.4vw, 5.8vh), 3.2rem); padding: 6px 0; }
+body.menu-aberto { position: fixed; left: 0; right: 0; width: 100%; overflow: hidden; }

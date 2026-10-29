@@ -6,7 +6,7 @@ import path from "node:path";
 import { C, SITE, URL_SITE, WA, esc, brl, item, precoDe, I, placa, foto, wa, pagina, ldFaq, ldMigalhas } from "./gerador/base.mjs";
 import {
   secCasos, secPrecos, secPrecosResumo, gradePrecos, precoCard, secLocalProva, ROTA_SVG, secVideos, reels, reel, botoesRedes, youtubeDestaque,
-  secEstrada, secGerador, secOrcRapido, FAQ, faqHtml, faqLd, secFaq, secOnde, cta, muralBloco
+  secEstrada, secGerador, taxasTotal, secOrcRapido, FAQ, faqHtml, faqLd, secFaq, secOnde, cta, muralBloco
 } from "./gerador/blocos.mjs";
 
 function salvar(rel, html) {
@@ -120,7 +120,7 @@ ${secOnde(b)}
    ================================================================= */
 {
   const b = "../";
-  const faq = [FAQ.geral[1], FAQ.geral[2], FAQ.geral[3], FAQ.localProva[2]];
+  const faq = [FAQ.geral[6], FAQ.geral[1], FAQ.geral[2], FAQ.geral[3], FAQ.localProva[2]];
   const corpo = `
 <section class="pg-hero" aria-labelledby="pg-titulo">
   <div class="container">
@@ -165,6 +165,7 @@ ${cta(b)}
         <li><strong>Já dirige?</strong> 2 aulas + veículo da prova por <span data-preco="duas-aulas-carro">${precoDe("duas-aulas-carro")}</span>.</li>
         <li><strong>Prova marcada?</strong> Aula no local da prova por <span data-preco="aula-local-prova">${precoDe("aula-local-prova")}</span>.</li>
         <li><strong>Tem CNH e perdeu a prática?</strong> Aula avulsa por <span data-preco="avulsa">${precoDe("avulsa")}</span>.</li>
+        <li><strong>Exames e taxas da CNH</strong> são pagos à parte: <span data-taxa="total">${brl(taxasTotal())}</span> no total. <a href="${b}precos/#taxas">Ver valores</a>.</li>
         <li>Nada é enviado para servidor: a mensagem só sai quando você aperta enviar no WhatsApp.</li>
       </ul>
       <p class="contato-rapido">Prefere falar direto? ${wa("", "btn btn--contorno btn--p", esc(C.whatsapp.rotulo))}</p>

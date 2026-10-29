@@ -162,6 +162,15 @@ window.GRAJAU = {
         resumo: "Para treinar o que falta, no seu ritmo.",
         categorias: ["A", "B"], quantidade: true
       }
+    ],
+
+    /* Pagos à parte, fora das aulas (clínica e Detran-SP).
+       Mesmos valores do site da Ariane (27/10/2026). */
+    taxasAParte: [
+      { id: "exame-medico-psico", nome: "Exame médico e psicotécnico", valor: 180 },
+      { id: "exame-toxico", nome: "Exame toxicológico", valor: 150 },
+      { id: "taxa-teorico", nome: "Taxa do exame teórico", valor: 52.83 },
+      { id: "taxa-emissao", nome: "Taxa de emissão da CNH", valor: 137.79 }
     ]
   },
 

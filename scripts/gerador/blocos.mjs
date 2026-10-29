@@ -81,9 +81,29 @@ export function gradePrecos(cat) {
     <div class="precos precos--avulsos">
       ${avu.map((i) => precoCard(i, { mini: true })).join("\n      ")}
     </div>` : ""}
+    ${cardTaxas()}
     <div class="precos__rodape">
-      <p class="fonte" style="margin:0">${esc(C.planos.aviso)} Valores dos cartazes da escola, conferidos em ${esc(C.planos.atualizadoEm)}. Exames médico, psicotécnico e toxicológico e as taxas do Detran-SP são pagos à parte.</p>
+      <p class="fonte" style="margin:0">${esc(C.planos.aviso)} Valores dos cartazes da escola, conferidos em ${esc(C.planos.atualizadoEm)}. As taxas do Detran-SP e o preço dos exames na clínica podem mudar.</p>
     </div>`;
+}
+
+/* ---------- Pagos à parte (exames e taxas) ---------- */
+export const taxas = () => C.planos.taxasAParte || [];
+export const taxasTotal = () => taxas().reduce((s, t) => s + (typeof t.valor === "number" ? t.valor : 0), 0);
+export function cardTaxas() {
+  if (!taxas().length) return "";
+  return `<h3 class="precos__grupo">À parte · exames e taxas</h3>
+    <article class="taxas revelar" id="taxas">
+      <div class="taxas__texto">
+        <span class="selo">Pagos à parte</span>
+        <h3>Exames e taxas da CNH</h3>
+        <p>Não entram no preço das aulas: são pagos à clínica e ao Detran-SP na primeira habilitação.</p>
+      </div>
+      <ul class="taxas__lista">
+        ${taxas().map((t) => `<li><span>${esc(t.nome)}</span><strong data-taxa="${t.id}">${brl(t.valor)}</strong></li>`).join("\n        ")}
+        <li class="taxas__total"><span>Total</span><strong data-taxa="total">${brl(taxasTotal())}</strong></li>
+      </ul>
+    </article>`;
 }
 
 export function secPrecosResumo(base) {
@@ -110,6 +130,7 @@ export function secPrecosResumo(base) {
       ${card("pacote-10")}
       ${card("duas-aulas-carro")}
     </div>
+    ${taxas().length ? `<a class="aviso-taxas revelar" href="${base}precos/#taxas">${I.alerta}<span>Exames e taxas da CNH são pagos à parte: <strong data-taxa="total">${brl(taxasTotal())}</strong> no total.</span><span class="aviso-taxas__ver">Ver valores →</span></a>` : ""}
   </div>
 </section>`;
 }
@@ -322,7 +343,8 @@ export const FAQ = {
     F("Posso tirar carro e moto juntos?", `Pode. O pacote de 20 aulas (${precoDe("pacote-20")}) pode ser dividido em 10 aulas de carro e 10 de moto, com o aluguel do veículo na 1ª prova de cada categoria de cortesia.`),
     F("Vocês dão aula para quem já tem CNH?", "Sim. Tem aula para habilitados que perderam a prática ou têm medo de dirigir, e também para quem quer adicionar a categoria A ou B."),
     F("Quais são os horários?", "Os horários e os dias são flexíveis: você combina com o instrutor pelo WhatsApp o que encaixa na sua rotina."),
-    F("Vocês atendem quais bairros?", "O Grajaú e a região, na Zona Sul de São Paulo. O ponto de referência é a Av. Dona Belmira Marin, 4772.")
+    F("Quanto custam os exames e as taxas da CNH?", `São pagos à parte, fora das aulas: ${(C.planos.taxasAParte || []).map((t) => t.nome.toLowerCase() + " " + brl(t.valor)).join(", ")}. Total: ${brl((C.planos.taxasAParte || []).reduce((s, t) => s + t.valor, 0))}. As taxas do Detran-SP podem mudar.`),
+    F("Vocês atendem quais bairros?","O Grajaú e a região, na Zona Sul de São Paulo. O ponto de referência é a Av. Dona Belmira Marin, 4772.")
   ],
   cnh: [
     F("Ainda preciso de autoescola para tirar a CNH?", "Não é mais obrigatório. Em 1º de dezembro de 2025, o Contran aprovou a resolução (citada como Resolução Contran nº 1.020/2025) que acabou com a obrigatoriedade da autoescola para a primeira habilitação. Você pode fazer o curso teórico on-line e gratuito e as aulas práticas com uma autoescola ou com um instrutor autônomo credenciado pelo Detran. As provas teórica e prática continuam obrigatórias.", FONTE_AB),

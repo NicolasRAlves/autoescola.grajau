@@ -188,6 +188,15 @@
     return l.join("\n");
   }
 
+  /* exames e taxas pagos à parte (config > planos.taxasAParte) */
+  var TAXAS = ((C.planos && C.planos.taxasAParte) || []).reduce(function (s, t) { return s + (typeof t.valor === "number" ? t.valor : 0); }, 0);
+  function notaTaxas() {
+    var id = casoAtual && casoAtual.id;
+    if (id === "habilitado") return "";
+    if ((id === "zero" || id === "ja-dirijo") && TAXAS) return "<small>Exames e taxas da CNH, pagos à parte: <strong style=\"display:inline;font-size:inherit;font-family:inherit\">" + brl(TAXAS) + "</strong> (médico, psicotécnico, toxicológico, exame teórico e emissão).</small>";
+    return "<small>Exames e taxas do Detran-SP são pagos à parte.</small>";
+  }
+
   function resumo() {
     blocoQtd();
     var cal = calculo();
@@ -196,7 +205,7 @@
         var cortesia = (cal.item.inclui || []).filter(function (t) { return /cortesia/i.test(t); })[0];
         estim.innerHTML = "<span>Valor estimado</span><small>" + (cal.item.quantidade ? cal.qtd + " × " : "") + esc(cal.item.nome) + "</small><strong>" + brl(cal.total) + "</strong>" +
           (cortesia ? "<small>" + esc(cortesia) + ".</small>" : "") +
-          (casoAtual && casoAtual.id === "habilitado" ? "" : "<small>Exames médico, psicotécnico e toxicológico e as taxas do Detran-SP são pagos à parte.</small>") + "<small>Valor confirmado pelo WhatsApp.</small>";
+          notaTaxas() + "<small>Valor confirmado pelo WhatsApp.</small>";
       } else if (cal) {
         estim.innerHTML = "<span>Valor</span><strong>Sob consulta</strong><small>O instrutor responde pelo WhatsApp com o valor do seu caso.</small>";
       } else {
