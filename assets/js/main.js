@@ -58,7 +58,7 @@
     var e = C.endereco || {};
     $$("[data-endereco]").forEach(function (el) {
       var l2 = [e.bairro, (e.cidade || "") + " - " + (e.uf || "")].filter(Boolean).join(", ");
-      el.innerHTML = esc(e.rua) + "<br>" + esc(l2) + (e.cep ? " · CEP " + esc(e.cep) : PEND("CLIENTE INFORMAR CEP"));
+      el.innerHTML = esc(e.rua) + "<br>" + esc(l2) + (e.cep ? " · <span style=\"white-space:nowrap\">CEP " + esc(e.cep) + "</span>" : PEND("CLIENTE INFORMAR CEP"));
     });
     var busca = encodeURIComponent(e.busca || (e.rua + ", " + e.cidade));
     $$("[data-maps]").forEach(function (a) { a.href = "https://www.google.com/maps/search/?api=1&query=" + busca; a.target = "_blank"; a.rel = "noopener"; });
@@ -143,19 +143,33 @@
     }
     var btn = $(".menu-btn"), menu = $("#menu-mobile");
     if (!btn || !menu) return;
-    var rot = $(".menu-btn__rotulo", btn);
+    /* o menu fica no DOM (para animar) e fica inerte enquanto fechado */
+    menu.hidden = false; menu.inert = true;
+    var aberto = false;
     function fechar(foco) {
-      btn.setAttribute("aria-expanded", "false"); rot.textContent = "Menu";
-      menu.classList.remove("aberto"); menu.hidden = true; doc.body.classList.remove("menu-aberto");
+      aberto = false;
+      btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-label", "Abrir menu");
+      menu.classList.remove("aberto"); menu.inert = true; doc.body.classList.remove("menu-aberto");
       if (foco) btn.focus();
     }
     function abrir() {
-      btn.setAttribute("aria-expanded", "true"); rot.textContent = "Fechar";
-      menu.hidden = false; menu.classList.add("aberto"); doc.body.classList.add("menu-aberto");
-      var p = $("a", menu); if (p) p.focus();
+      aberto = true;
+      btn.setAttribute("aria-expanded", "true"); btn.setAttribute("aria-label", "Fechar menu");
+      menu.inert = false; menu.classList.add("aberto"); doc.body.classList.add("menu-aberto");
+      menu.scrollTop = 0;
+      setTimeout(function () { var p = $(".menu__lista a", menu); if (p && aberto) p.focus({ preventScroll: true }); }, reduz ? 0 : 350);
     }
-    btn.addEventListener("click", function () { btn.getAttribute("aria-expanded") === "true" ? fechar(false) : abrir(); });
-    doc.addEventListener("keydown", function (e) { if (e.key === "Escape" && menu.classList.contains("aberto")) fechar(true); });
+    btn.addEventListener("click", function () { aberto ? fechar(false) : abrir(); });
+    doc.addEventListener("keydown", function (e) {
+      if (!aberto) return;
+      if (e.key === "Escape") { fechar(true); return; }
+      if (e.key !== "Tab") return;
+      /* foco circula entre o botão de fechar e os itens do menu */
+      var itens = [btn].concat($$("a, button", menu));
+      var i = itens.indexOf(doc.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); itens[itens.length - 1].focus(); }
+      else if (!e.shiftKey && i === itens.length - 1) { e.preventDefault(); itens[0].focus(); }
+    });
     $$("a", menu).forEach(function (a) { a.addEventListener("click", function () { fechar(false); }); });
     window.addEventListener("resize", function () { if (window.innerWidth >= 1060 && menu.classList.contains("aberto")) fechar(false); });
   }

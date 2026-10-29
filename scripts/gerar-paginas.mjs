@@ -5,7 +5,7 @@ import { writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { C, SITE, URL_SITE, WA, esc, brl, item, precoDe, I, placa, foto, wa, pagina, ldFaq, ldMigalhas } from "./gerador/base.mjs";
 import {
-  secCasos, secPrecos, gradePrecos, precoCard, secLocalProva, ROTA_SVG, secVideos, reels, reel, botoesRedes, youtubeDestaque,
+  secCasos, secPrecos, secPrecosResumo, gradePrecos, precoCard, secLocalProva, ROTA_SVG, secVideos, reels, reel, botoesRedes, youtubeDestaque,
   secEstrada, secGerador, secOrcRapido, FAQ, faqHtml, faqLd, secFaq, secOnde, cta, muralBloco
 } from "./gerador/blocos.mjs";
 
@@ -23,23 +23,19 @@ const ld = (lista) => ldFaq(faqLd(lista));
    ================================================================= */
 {
   const b = "./";
-  const beneficios = ["Horários e dias flexíveis", "Instrutor paciente", "Aula no local da prova", "Carro e moto para a prova", "Primeira habilitação A e B", "Adição de categoria", "Aulas para habilitados", "Grajaú e região"];
+  const beneficios = ["Horários flexíveis", "Instrutor paciente", "Aula no local da prova", "Veículo para a prova", "Carro e moto", "Grajaú e região"];
   const ticker = `<ul>${beneficios.map((t) => `<li>${t}</li>`).join("")}</ul>`;
-  const faqHome = [...FAQ.geral, ...FAQ.cnh.slice(0, 3)];
+  const faqHome = [FAQ.geral[0], FAQ.geral[1], FAQ.geral[2], FAQ.geral[5], FAQ.cnh[0]];
   const corpo = `
 <section class="hero" aria-labelledby="hero-titulo">
   <div class="container hero__grade">
-    <div>
-      <p class="hero__selo">${I.trofeu} O primeiro instrutor autônomo da Zona Sul</p>
+    <div class="hero__texto">
+      <p class="hero__selo">${I.trofeu} 1º instrutor autônomo da Zona Sul</p>
       <h1 id="hero-titulo">Aprenda a dirigir <span class="ouro">no Grajaú</span>, no seu horário.</h1>
-      <p class="hero__sub">Aulas de <strong>carro e moto</strong> com instrutor paciente, para a primeira habilitação, a adição de categoria ou para voltar a dirigir. Tem <strong>aula no local da prova</strong> e o <strong>veículo da escola no dia do exame</strong>.</p>
+      <p class="hero__sub">Carro e moto com instrutor paciente, aula no local da prova e o veículo da escola no dia do exame.</p>
       <div class="btns">
         <a class="btn btn--ouro" href="orcamento/">Montar meu orçamento</a>
-        ${wa("", "btn btn--contorno", "Chamar no WhatsApp")}
-      </div>
-      <div class="hero__info">
-        <a data-wa href="${WA}">${I.whats}<span data-whats-rotulo>${esc(C.whatsapp.rotulo)}</span></a>
-        <a data-maps href="#">${I.pin}Av. Dona Belmira Marin, 4772</a>
+        ${wa("", "btn btn--contorno", "WhatsApp")}
       </div>
     </div>
     <div class="hero__reel">
@@ -48,7 +44,7 @@ const ld = (lista) => ldFaq(faqLd(lista));
         <span class="reel-tela__rotulo"><img src="assets/img/logo-grajau.png" width="580" height="490" alt="">@${esc(C.instagram.usuario)}</span>
       </div>
       <span class="flutua flutua--1">${I.relogio} Horário flexível</span>
-      <span class="flutua flutua--2">${I.pin} Aula no local da prova</span>
+      <span class="flutua flutua--2">${I.pin} Local da prova</span>
       <span class="flutua flutua--3">${I.escudo} Categorias A e B</span>
     </div>
   </div>
@@ -64,64 +60,88 @@ ${secCasos(b)}
     <div class="revelar">
       <span class="eyebrow">Quem vai te ensinar</span>
       <h2 class="titulo" id="porque-titulo">Paciência, foco <em>e café</em></h2>
-      <p class="lead">Aulas leves, preço justo e flexibilidade de horário. No Grajaú, você não apenas tira sua habilitação: você conquista sua liberdade.</p>
+      <p class="lead">Aulas leves, preço justo e o seu horário.</p>
       <p data-instrutor></p>
-      <div class="cards cards--2">
-        <article class="card"><div class="card__icone">${I.relogio}</div><h3>Horário flexível</h3><p>Dias e horários combinados com você, sem grade fixa.</p></article>
-        <article class="card"><div class="card__icone">${I.sorriso}</div><h3>Instrutor paciente</h3><p>Sem grito e sem pressão: a aula vai no seu ritmo.</p></article>
-        <article class="card"><div class="card__icone">${I.carro}</div><h3>Veículos revisados</h3><p>Carro e moto da escola nas aulas e no dia da prova.</p></article>
-        <article class="card"><div class="card__icone">${I.coracao}</div><h3>Atendimento de perto</h3><p>Você fala direto com o instrutor pelo WhatsApp.</p></article>
-      </div>
+      <ul class="chips">
+        <li>${I.relogio} Horário flexível</li>
+        <li>${I.sorriso} Instrutor paciente</li>
+        <li>${I.carro} Veículos revisados</li>
+        <li>${I.whats} Fala direto no WhatsApp</li>
+      </ul>
     </div>
     <div class="revelar">
-      <div class="foto foto--moldura">${foto(b, "mascote", "Arte da Auto Escola Grajaú: o mascote do instrutor fazendo sinal de positivo, com o carro e a moto da escola e a frase 'No Grajaú, você não apenas tira sua habilitação, você conquista sua liberdade'")}</div>
+      <div class="foto foto--moldura">${foto(b, "mascote", "Arte da Auto Escola Grajaú: o mascote do instrutor fazendo sinal de positivo, com o carro e a moto da escola")}</div>
     </div>
   </div>
 </section>
 
-${secPrecos(b)}
+${secPrecosResumo(b)}
 
 ${secLocalProva(b)}
 
+${secVideos(b)}
+
 <section class="secao secao--creme" id="instrutor-autonomo" aria-labelledby="autonomo-titulo">
   <div class="container duas-col">
-    <div class="revelar">
-      <div class="foto foto--moldura" style="max-width:460px;margin:0 auto">${foto(b, "gibi", "Capa de gibi ilustrada: o instrutor da Grajaú de braços cruzados, com o carro e a moto da escola e os balões 'O primeiro instrutor autônomo da Zona Sul' e 'Aulas no local da prova'")}</div>
+    <div class="revelar nova-cnh__foto">
+      <div class="foto foto--moldura">${foto(b, "gibi", "Capa de gibi ilustrada: o instrutor da Grajaú de braços cruzados, com o carro e a moto da escola e os balões 'O primeiro instrutor autônomo da Zona Sul' e 'Aulas no local da prova'")}</div>
     </div>
     <div class="revelar">
       <span class="eyebrow">Nova CNH</span>
-      <h2 class="titulo" id="autonomo-titulo">Agora dá para tirar a CNH com <em>instrutor autônomo</em></h2>
-      <p class="lead">Desde dezembro de 2025, a autoescola deixou de ser obrigatória: as aulas práticas podem ser feitas com instrutor autônomo credenciado pelo Detran. A prova continua a mesma.</p>
+      <h2 class="titulo" id="autonomo-titulo">Autoescola <em>não é mais obrigatória</em></h2>
       <ul class="lista-check">
-        <li><strong>Mínimo de 2 horas</strong> de aula prática (antes eram 20)</li>
-        <li>Curso teórico <strong>on-line e gratuito</strong> no app CNH do Brasil</li>
-        <li>Você paga <strong>só as aulas que precisa</strong></li>
-        <li>Aula <strong>só sua</strong>, no horário que você escolhe</li>
+        <li>Aulas com <strong>instrutor autônomo</strong> credenciado</li>
+        <li>Mínimo de <strong>2 horas</strong> de aula prática</li>
+        <li>Teórico <strong>on-line e gratuito</strong></li>
       </ul>
       <p class="nota" data-cnpj></p>
-      <div class="btns"><a class="btn btn--preto" href="instrutor-autonomo/">Entenda a Nova CNH</a></div>
-      <p class="fonte">${esc("Fonte: Agência Brasil, 01/12/2025.")} Conferido em ${esc(C.regrasAtualizadasEm)}.</p>
+      <a class="btn btn--preto" href="instrutor-autonomo/">Entenda a Nova CNH</a>
+      <p class="fonte">Fonte: Agência Brasil, 01/12/2025.</p>
     </div>
   </div>
 </section>
 
-${secVideos(b)}
-
-${secGerador(b)}
-
-${secEstrada(b)}
-
 ${secOrcRapido(b)}
 
-${secFaq(faqHome)}
+${secFaq(faqHome, { escola: "", titulo: 'Dúvidas <em>rápidas</em>' })}
 
 ${secOnde(b)}
 `;
   salvar("index.html", pagina({
-    base: b, url: "", atual: "",
+    base: b, url: "", atual: "inicio",
     titulo: "Auto Escola Grajaú | Instrutor autônomo de carro e moto no Grajaú, Zona Sul de SP",
     descricao: `Aulas de carro e moto no Grajaú com instrutor autônomo: horário flexível, aula no local da prova e veículo para o exame. Aula avulsa ${precoDe("avulsa")}, 10 aulas ${precoDe("pacote-10")}. Orçamento no WhatsApp.`,
-    corpo, scripts: ["orcamento", "estrada", "placa"], ld: [ld(faqHome)]
+    corpo, scripts: ["orcamento"], ld: [ld(faqHome)]
+  }));
+}
+
+/* =================================================================
+   PREÇOS
+   ================================================================= */
+{
+  const b = "../";
+  const faq = [FAQ.geral[1], FAQ.geral[2], FAQ.geral[3], FAQ.localProva[2]];
+  const corpo = `
+<section class="pg-hero" aria-labelledby="pg-titulo">
+  <div class="container">
+    ${migalhas(b, "Preços")}
+    <span class="eyebrow">Tabela completa</span>
+    <h1 id="pg-titulo">Preços <em>das aulas</em></h1>
+    <p class="lead">Pacote, só as aulas que faltam ou só o veículo da prova. Você escolhe.</p>
+  </div>
+</section>
+
+${secPrecos(b, { titulo: 'Escolha <em>o seu</em>' })}
+
+${secFaq(faq, { escola: "", titulo: 'Preços: <em>dúvidas</em>' })}
+
+${cta(b)}
+`;
+  salvar("precos/index.html", pagina({
+    base: b, url: "precos/", atual: "precos",
+    titulo: "Preços das aulas de carro e moto no Grajaú | Auto Escola Grajaú",
+    descricao: `Aula avulsa ${precoDe("avulsa")}, 2 aulas + aluguel ${precoDe("duas-aulas-carro")}, 10 aulas ${precoDe("pacote-10")}, 20 aulas (carro + moto) ${precoDe("pacote-20")}, aula no local da prova e aluguel do veículo ${precoDe("aluguel")}.`,
+    corpo, ld: [ld(faq), ldMigalhas([["Preços", "precos/"]])]
   }));
 }
 
@@ -588,20 +608,7 @@ ${cta(b, { titulo: "Bora voltar a dirigir?", texto: "Conta o que trava e o instr
   </div>
 </section>
 
-<section class="secao secao--creme" aria-labelledby="passos-titulo">
-  <div class="container container--estreito">
-    <span class="eyebrow">Passo a passo</span>
-    <h2 class="titulo" id="passos-titulo">Como tirar a CNH <em>com instrutor autônomo</em></h2>
-    <ol class="passo-a-passo">
-      <li><strong>Faça os exames médico e psicotécnico</strong>Primeiro passo, presencial. Na primeira habilitação também é exigido o exame toxicológico. Junto vem a coleta de foto e biometria.</li>
-      <li><strong>Faça o curso teórico no app</strong>Baixe o app CNH do Brasil (a antiga Carteira Digital de Trânsito) e faça o curso teórico, on-line e gratuito.</li>
-      <li><strong>Passe na prova teórica</strong>Aplicada pelo Detran-SP.</li>
-      <li><strong>Faça as aulas práticas com a Grajaú</strong>A lei exige no mínimo 2 horas, com autoescola ou instrutor autônomo credenciado. Você escolhe: 2, 4, 10 ou 20 aulas, ou avulsas.</li>
-      <li><strong>Treine no local e faça a prova prática</strong>Aula no local da prova e o veículo da escola no dia do exame. Cada erro soma pontos: até 10, aprovado.</li>
-      <li><strong>Receba a CNH</strong>Com a taxa de emissão paga, a habilitação aparece no app.</li>
-    </ol>
-  </div>
-</section>
+${secEstrada(b)}
 
 <section class="secao" aria-labelledby="comparar-titulo">
   <div class="container duas-col duas-col--topo">
@@ -670,7 +677,7 @@ ${secFaq(faq, { escola: "", titulo: 'Nova CNH: <em>dúvidas</em>', classe: "seca
 ${cta(b)}
 `;
   salvar("instrutor-autonomo/index.html", pagina({
-    base: b, url: "instrutor-autonomo/", atual: "autonomo", scripts: ["pontuacao"],
+    base: b, url: "instrutor-autonomo/", atual: "autonomo", scripts: ["pontuacao", "estrada"],
     titulo: "Instrutor autônomo e Nova CNH 2026 em SP: o que mudou | Auto Escola Grajaú",
     descricao: "Autoescola não é mais obrigatória: veja como tirar a CNH com instrutor autônomo em SP, o que mudou na prova (sem baliza, sistema de pontos) e teste o simulador de pontuação.",
     corpo, ld: [ld(faq), ldMigalhas([["Instrutor autônomo", "instrutor-autonomo/"]])]
@@ -699,6 +706,8 @@ ${cta(b)}
   </div>
 </section>
 
+${secGerador(b)}
+
 <section class="secao secao--grafite" aria-labelledby="yt-titulo">
   <div class="container duas-col">
     <div class="revelar">
@@ -714,7 +723,7 @@ ${cta(b)}
 ${cta(b)}
 `;
   salvar("videos/index.html", pagina({
-    base: b, url: "videos/", atual: "videos", scripts: ["mural"],
+    base: b, url: "videos/", atual: "videos", scripts: ["mural", "placa"],
     titulo: "Vídeos das aulas de carro e moto | Auto Escola Grajaú",
     descricao: "Veja como são as aulas de carro e moto da Auto Escola Grajaú, com instrutor autônomo no Grajaú, Zona Sul de São Paulo.",
     corpo, ld: [ldMigalhas([["Vídeos", "videos/"]]), {
@@ -752,7 +761,7 @@ ${cta(b)}
    ================================================================= */
 {
   const hoje = new Date().toISOString().slice(0, 10);
-  const urls = [["", "1.0"], ["orcamento/", "0.9"], ["aula-no-local-da-prova/", "0.9"], ["categoria-b/", "0.8"], ["categoria-a/", "0.8"], ["habilitados/", "0.8"], ["instrutor-autonomo/", "0.8"], ["videos/", "0.6"]];
+  const urls = [["", "1.0"], ["orcamento/", "0.9"], ["precos/", "0.9"], ["aula-no-local-da-prova/", "0.9"], ["categoria-b/", "0.8"], ["categoria-a/", "0.8"], ["habilitados/", "0.8"], ["instrutor-autonomo/", "0.8"], ["videos/", "0.6"]];
   salvar("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(([u, p]) => `  <url><loc>${URL_SITE}/${u}</loc><lastmod>${hoje}</lastmod><priority>${p}</priority></url>`).join("\n")}

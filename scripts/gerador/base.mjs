@@ -77,44 +77,50 @@ export const wa = (msg, cls = "btn btn--whats", rotulo = "Chamar no WhatsApp") =
 
 /* ---------- Layout ---------- */
 const NAV = [
-  ["precos", "Preços", "#precos"],
+  ["precos", "Preços", "precos/"],
   ["local-prova", "Local da prova", "aula-no-local-da-prova/"],
   ["b", "Carro", "categoria-b/"],
   ["a", "Moto", "categoria-a/"],
   ["habilitados", "Habilitados", "habilitados/"],
   ["videos", "Vídeos", "videos/"]
 ];
+/* menu de tela cheia: só as opções */
 const MENU = [
-  ["orcamento", "Montar meu orçamento", "orcamento/", "1 minuto"],
-  ["precos", "Preços", "#precos", ""],
-  ["local-prova", "Aula no local da prova", "aula-no-local-da-prova/", ""],
-  ["b", "Categoria B · Carro", "categoria-b/", ""],
-  ["a", "Categoria A · Moto", "categoria-a/", ""],
-  ["habilitados", "Habilitados e adição", "habilitados/", ""],
-  ["autonomo", "Instrutor autônomo", "instrutor-autonomo/", "Nova CNH"],
-  ["videos", "Vídeos", "videos/", ""],
-  ["onde", "Onde estamos", "#onde-estamos", ""]
+  ["inicio", "Início", ""],
+  ["precos", "Preços", "precos/"],
+  ["local-prova", "Local da prova", "aula-no-local-da-prova/"],
+  ["b", "Carro", "categoria-b/"],
+  ["a", "Moto", "categoria-a/"],
+  ["habilitados", "Habilitados", "habilitados/"],
+  ["autonomo", "Nova CNH", "instrutor-autonomo/"],
+  ["videos", "Vídeos", "videos/"]
 ];
-function href(base, alvo) { return alvo.startsWith("#") ? base + alvo : base + alvo; }
 
 export function cabecalho(base, atual) {
-  const nav = NAV.map(([id, r, a]) => `<li><a href="${href(base, a)}"${id === atual ? ' aria-current="page"' : ""}>${r}</a></li>`).join("");
-  const menu = MENU.map(([id, r, a, sub]) => `<li><a href="${href(base, a)}"${id === atual ? ' aria-current="page"' : ""}>${r}${sub ? `<small>${sub}</small>` : ""}</a></li>`).join("");
+  const nav = NAV.map(([id, r, a]) => `<li><a href="${base}${a}"${id === atual ? ' aria-current="page"' : ""}>${r}</a></li>`).join("");
+  const menu = MENU.map(([id, r, a], k) => `<li style="--i:${k}"><a href="${base}${a}"${id === atual ? ' aria-current="page"' : ""}><span class="menu__num">${String(k + 1).padStart(2, "0")}</span><span class="menu__txt">${r}</span></a></li>`).join("");
   return `<a class="pular" href="#conteudo">Pular para o conteúdo</a>
 <div class="faixa-rascunho" role="note">Prévia para aprovação: os itens marcados em amarelo aguardam informações da Auto Escola Grajaú.</div>
 <header class="topo">
   <div class="container topo__linha">
-    <a class="logo" href="${base}" aria-label="Auto Escola Grajaú, página inicial">${ESCUDO}<span class="logo__texto"><span class="logo__nome">GRAJAÚ</span><span class="logo__sub">Instrutor autônomo · A e B</span></span></a>
+    <a class="logo" href="${base}" aria-label="Auto Escola Grajaú, página inicial">${ESCUDO}<span class="logo__texto"><span class="logo__nome">GRAJAÚ</span><span class="logo__sub">Instrutor autônomo</span></span></a>
     <nav class="nav" aria-label="Principal"><ul>${nav}</ul></nav>
-    <a class="btn btn--ouro btn--p topo__cta" href="${base}orcamento/">Montar orçamento</a>
-    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-mobile"><span class="menu-btn__icone" aria-hidden="true"><span></span><span></span><span></span></span><span class="menu-btn__rotulo">Menu</span></button>
+    <a class="btn btn--ouro btn--p topo__cta" href="${base}orcamento/">Orçamento</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Abrir menu"><span class="menu-btn__icone" aria-hidden="true"><span></span><span></span></span></button>
   </div>
 </header>
-<nav class="menu-mobile" id="menu-mobile" aria-label="Menu" hidden>
-  <ul>${menu}</ul>
-  ${wa("", "btn btn--whats", "Chamar no WhatsApp")}
-  <a class="btn btn--contorno" data-tel="0" data-tel-fixo href="tel:${C.telefones[0].numero}">${I.tel} Ligar ${esc(C.telefones[0].rotulo)}</a>
-</nav>`;
+<div class="menu-mobile" id="menu-mobile" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+  <nav aria-label="Páginas"><ul class="menu__lista">${menu}</ul></nav>
+  <div class="menu__rodape" style="--i:${MENU.length}">
+    <a class="btn btn--ouro btn--bloco" href="${base}orcamento/">Montar meu orçamento</a>
+    <div class="menu__redes">
+      <a data-wa href="${WA}" aria-label="WhatsApp">${I.whats}</a>
+      <a data-instagram href="${C.instagram.url}" aria-label="Instagram">${I.insta}</a>
+      <a data-youtube href="${C.youtube.url}" aria-label="YouTube">${I.youtube}</a>
+      <a data-tel="0" data-tel-fixo href="tel:${C.telefones[0].numero}" aria-label="Ligar">${I.tel}</a>
+    </div>
+  </div>
+</div>`;
 }
 
 export function rodape(base) {
@@ -144,6 +150,7 @@ export function rodape(base) {
         <h2>Páginas</h2>
         <ul>
           <li><a href="${base}orcamento/">Montar meu orçamento</a></li>
+          <li><a href="${base}precos/">Preços</a></li>
           <li><a href="${base}aula-no-local-da-prova/">Aula no local da prova</a></li>
           <li><a href="${base}categoria-b/">Categoria B · Carro</a></li>
           <li><a href="${base}categoria-a/">Categoria A · Moto</a></li>

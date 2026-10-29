@@ -15,7 +15,6 @@ export function casosGrade(base) {
         <span class="caso__icone">${ICONE_CASO[c.icone] || I.mais}</span>
         <h3>${esc(c.titulo)}</h3>
         <p class="caso__sub">${esc(c.subtitulo)}</p>
-        <p>${esc(c.texto)}</p>
         <span class="caso__ir">Ver meu orçamento →</span>
       </a>`;
   }).join("\n      ");
@@ -25,7 +24,6 @@ export function casosGrade(base) {
         <span class="caso__icone">${I.whats}</span>
         <h3>Não sei ainda</h3>
         <p class="caso__sub">Quero conversar antes</p>
-        <p>Conta a sua situação no WhatsApp e o instrutor indica o melhor caminho.</p>
         <span class="caso__ir" style="margin-top:auto;padding-top:12px">Chamar no WhatsApp →</span>
       </a>
     </div>`;
@@ -37,7 +35,7 @@ export function secCasos(base) {
     <div class="secao__topo revelar">
       <span class="eyebrow">Monte do seu jeito</span>
       <h2 class="titulo" id="casos-titulo">Qual é <em>o seu caso?</em></h2>
-      <p class="lead">Cada pessoa chega num momento diferente. Escolha o seu e veja a opção certa, com preço, sem pagar por aula que você não precisa.</p>
+      <p class="lead">Toque no seu e veja o orçamento em 1 minuto.</p>
     </div>
     ${casosGrade(base)}
   </div>
@@ -88,6 +86,34 @@ export function gradePrecos(cat) {
     </div>`;
 }
 
+export function secPrecosResumo(base) {
+  const card = (id, destaque) => {
+    const i = item(id);
+    return `<article class="mini-preco${destaque ? " mini-preco--destaque" : ""} revelar">
+        <span class="selo${destaque ? " selo--cheio" : ""}">${esc(i.selo)}</span>
+        <h3>${esc(i.nome)}</h3>
+        <p class="mini-preco__valor" data-preco="${i.id}">${brl(i.preco)}</p>
+        ${wa(`Olá! Vim pelo site da Auto Escola Grajaú e quero saber do ${i.nome}.`, `btn ${destaque ? "btn--ouro" : "btn--contorno"} btn--bloco btn--p`, "Quero esse")}
+      </article>`;
+  };
+  return `<section class="secao" id="precos" aria-labelledby="precos-titulo">
+  <div class="container">
+    <div class="secao__topo secao__topo--linha revelar">
+      <div>
+        <span class="eyebrow">Preços</span>
+        <h2 class="titulo" id="precos-titulo">Preço claro, <em>sem surpresa</em></h2>
+      </div>
+      <a class="link-seta" href="${base}precos/">Ver todos os preços →</a>
+    </div>
+    <div class="mini-precos">
+      ${card("pacote-20", true)}
+      ${card("pacote-10")}
+      ${card("duas-aulas-carro")}
+    </div>
+  </div>
+</section>`;
+}
+
 export function secPrecos(base, { cat = null, titulo = 'Preço claro, <em>sem surpresa</em>', classe = "secao" } = {}) {
   return `<section class="${classe}" id="precos" aria-labelledby="precos-titulo">
   <div class="container">
@@ -131,13 +157,11 @@ export function secLocalProva(base) {
     <div class="revelar">
       <span class="eyebrow">O diferencial</span>
       <h2 class="titulo" id="local-prova-titulo">Aula <em>no local da prova</em></h2>
-      <p class="lead">Treinar no mesmo lugar onde o examinador vai te avaliar muda tudo: você conhece as ruas, a sinalização e os pontos que mais reprovam antes do dia do exame.</p>
-      <p class="nota">Na prova de carro. A prova de moto é feita em área fechada.</p>
+      <p class="lead">Treine nas mesmas ruas onde o examinador vai te avaliar.</p>
       <ul class="lista-check">
-        <li>Você conhece o percurso antes do dia</li>
-        <li>Treina conversões, preferências e sinalização daquele lugar</li>
-        <li>Chega no exame com menos nervosismo</li>
-        <li>Faz a prova com o carro ou a moto da escola</li>
+        <li>Conhece o percurso antes do dia</li>
+        <li>Chega no exame sem nervoso</li>
+        <li>Prova com o veículo da escola</li>
       </ul>
       <div class="btns">
         ${wa("Olá! Vim pelo site da Auto Escola Grajaú e quero uma aula no local da prova.", "btn btn--ouro", "Quero aula no local")}
@@ -175,7 +199,7 @@ export function secVideos(base, { cat = null, titulo = 'Veja como são <em>as au
     <div class="secao__topo revelar">
       <span class="eyebrow">Em vídeo</span>
       <h2 class="titulo" id="videos-titulo">${titulo}</h2>
-      <p class="lead">Aula de verdade, com aluno de verdade, aqui na região. Toque para assistir (com som).</p>
+      <p class="lead">Aula de verdade, aqui na região. Toque para assistir.</p>
     </div>
     ${reels(base, cat)}
     <div class="btns" style="margin-top:20px">
@@ -199,7 +223,7 @@ export function youtubeDestaque() {
 
 /* ---------- Estrada (passo a passo) ---------- */
 export function secEstrada(base) {
-  return `<section class="secao" id="como-tirar" aria-labelledby="estrada-titulo">
+  return `<section class="secao secao--grafite" id="como-tirar" aria-labelledby="estrada-titulo">
   <div class="container container--estreito">
     <div class="secao__topo revelar">
       <span class="eyebrow">Passo a passo</span>
@@ -269,9 +293,8 @@ export function secOrcRapido(base) {
   <div class="container orc">
     <div class="revelar">
       <span class="eyebrow">Orçamento rápido</span>
-      <h2 class="titulo" id="orc-titulo">2 toques e <em>a mensagem tá pronta</em></h2>
-      <p class="lead">Escolha o seu caso e a categoria. O WhatsApp abre com tudo escrito, avisando que você veio pelo site. Você só aperta enviar.</p>
-      <p>Quer o valor na hora? <a href="${base}orcamento/" style="color:#141210;font-weight:700">Use o orçamento completo</a>: leva 1 minuto.</p>
+      <h2 class="titulo" id="orc-titulo">2 toques e <em>pronto</em></h2>
+      <p class="lead">Escolha o caso e a categoria. O WhatsApp abre com a mensagem escrita.</p>
     </div>
     <form class="orc__form claro revelar" data-orc-rapido>
       <fieldset class="campo"><legend>Qual é o seu caso?</legend><div class="opcoes">${casos}</div></fieldset>

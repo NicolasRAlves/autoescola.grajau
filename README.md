@@ -8,15 +8,20 @@ A diferença: aqui as páginas são **geradas** pelo `scripts/gerar-paginas.mjs`
 
 | Endereço | O que tem |
 |---|---|
-| `/` | Hero com vídeo, faixa de diferenciais, **"Qual é o seu caso?"** (7 casos), preços, aula no local da prova, Nova CNH, vídeos, o instrutor, estrada do passo a passo, gerador de placa APROVADO, orçamento rápido, FAQ e mapa |
+| `/` | Home enxuta: topo que cabe na tela do notebook, **"Qual é o seu caso?"** (7 casos), o instrutor, resumo de preços (3 cards), aula no local da prova, vídeos, Nova CNH, orçamento rápido, 5 dúvidas e mapa |
+| `/precos/` | Tabela completa de preços |
 | `/orcamento/` | **Formulário por caso**: cada caso tem as próprias perguntas e opções de preço, e termina no WhatsApp |
 | `/aula-no-local-da-prova/` | O diferencial: por que funciona, como funciona, preços e FAQ |
 | `/categoria-b/` | Carro (VW up!) |
 | `/categoria-a/` | Moto |
 | `/habilitados/` | Quem tem CNH e não dirige, e adição de categoria (`#adicao`) |
-| `/instrutor-autonomo/` | Guia da Nova CNH 2026, tabela antes × agora, simulador de pontos da prova prática e fontes |
-| `/videos/` | Reels e canal do YouTube (o player só carrega no clique) |
+| `/instrutor-autonomo/` | Guia da Nova CNH 2026, tabela antes × agora, estrada do passo a passo, simulador de pontos da prova prática e fontes |
+| `/videos/` | Reels, gerador de placa APROVADO e canal do YouTube (o player só carrega no clique) |
 | `/404.html` | Página de erro |
+
+## Menu
+
+No computador, os links ficam no topo com um sublinhado dourado animado. No celular e no tablet, o botão abre um menu de tela cheia, com fundo preto e só as opções: ele abre em círculo a partir do botão e os itens entram em cascata. Fecha com o X, com Esc ou ao tocar num item, e mantém o foco do teclado dentro do menu. As opções ficam em `scripts/gerador/base.mjs` (`NAV` e `MENU`).
 
 ## O formulário de orçamento (o coração do site)
 
