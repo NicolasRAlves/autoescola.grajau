@@ -189,7 +189,7 @@ export function secLocalProva(base) {
         <a class="btn btn--contorno" href="${base}aula-no-local-da-prova/">Como funciona</a>
       </div>
     </div>
-    <div class="rota revelar">${ROTA_SVG}</div>
+    <div class="revelar">${youtubeDestaque()}</div>
   </div>
 </section>`;
 }
